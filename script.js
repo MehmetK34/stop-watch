@@ -37,8 +37,6 @@ play.addEventListener("click", () => {
   run = !run; //! run başlangıç değeri false idi ben bunu değerini true olarak değiştirdim
   if (run) {
     startColor();
-    audioBody.currentTime = 20; // Ses dosyasını 20 saniye sonra başlatır
-
     audio.play();
     timer = setInterval(watchTimer, 5);
     play.innerHTML = `<i class="fa-solid fa-circle-pause"></i>`;
