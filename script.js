@@ -4,6 +4,7 @@ const reset = document.querySelector(".btn2");
 const audio = document.querySelector(".audio");
 const clock = document.querySelector("p");
 const bg = document.querySelector("body");
+const audioBody = document.getElementsByClassName("audio");
 
 //? The following are global
 
@@ -12,6 +13,7 @@ let sec = 0;
 let mSec = 0;
 let run = false;
 let timer;
+let colorChanging; // Renk değişimi durumu
 
 const watchTimer = () => {
   mSec++;
@@ -34,11 +36,14 @@ const watchTimer = () => {
 play.addEventListener("click", () => {
   run = !run; //! run başlangıç değeri false idi ben bunu değerini true olarak değiştirdim
   if (run) {
-    renk();
+    startColor();
+    audioBody.currentTime = 20; // Ses dosyasını 20 saniye sonra başlatır
+
     audio.play();
-    timer = setInterval(watchTimer, 10);
+    timer = setInterval(watchTimer, 5);
     play.innerHTML = `<i class="fa-solid fa-circle-pause"></i>`;
   } else {
+    stopColor();
     audio.pause();
     clearInterval(timer);
     play.innerHTML = `<i class="fa-solid fa-circle-play"></i>`;
@@ -47,7 +52,6 @@ play.addEventListener("click", () => {
 
 reset.addEventListener("click", () => {
   audio.pause();
-
   clearInterval(timer);
   //? asagidaki min , sec , mSec degelerini ; resetleme yaotigi zaman tekrar sifirdan baslamasi icin , yani kaldigi yerden devam etmemesi icin yaptim.
   min = 0;
@@ -56,6 +60,7 @@ reset.addEventListener("click", () => {
   clock.textContent = "00:00:00";
   play.innerHTML = `<i class="fa-solid fa-circle-play"></i>`;
   run = false;
+  stopColor();
 });
 
 play.onmouseover = function () {
@@ -75,43 +80,34 @@ reset.onmouseout = function () {
   reset.style.transform = "scale(1, 1)";
 };
 
-const renk = () => {
-  if (run) {
-    setTimeout(() => {
-      bg.style.backgroundColor = "crimson";
-      setTimeout(() => {
-        bg.style.backgroundColor = "darkmagenta";
-        setTimeout(() => {
-          bg.style.backgroundColor = "darkhaki";
-          setTimeout(() => {
-            bg.style.backgroundColor = "darkolivegreen";
-            setTimeout(() => {
-              bg.style.backgroundColor = "lightseagreen";
-              setTimeout(() => {
-                bg.style.backgroundColor = "darksalmon";
-                setTimeout(() => {
-                  bg.style.backgroundColor = "cadetblue";
-                  setTimeout(() => {
-                    bg.style.backgroundColor = "ivory";
-                    setTimeout(() => {
-                      bg.style.backgroundColor = "maroon";
-                      setTimeout(() => {
-                        bg.style.backgroundColor = "gold";
-                        setTimeout(() => {
-                          bg.style.backgroundColor = "indigo";
-                          setTimeout(() => {
-                            bg.style.backgroundColor = "darkorange";
-                          }, 5000);
-                        }, 5000);
-                      }, 5000);
-                    }, 5000);
-                  }, 5000);
-                }, 5000);
-              }, 5000);
-            }, 5000);
-          }, 5000);
-        }, 5000);
-      }, 5000);
-    }, 5000);
-  }
+const colors = [
+  "crimson",
+  "darkmagenta",
+  "darkhaki",
+  "darkolivegreen",
+  "lightseagreen",
+  "darksalmon",
+  "cadetblue",
+  "ivory",
+  "maroon",
+  "gold",
+  "indigo",
+  "darkorange",
+];
+
+const randomColor = () => {
+  const randomIndex = Math.floor(Math.random() * colors.length);
+  return colors[randomIndex];
+};
+
+const bgColor = () => {
+  bg.style.backgroundColor = randomColor();
+};
+
+const startColor = () => {
+  colorChanging = setInterval(bgColor, 2000);
+};
+
+const stopColor = () => {
+  clearInterval(colorChanging);
 };
